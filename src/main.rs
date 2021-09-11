@@ -1,18 +1,19 @@
 mod utils;
 mod word;
 
-use std::env;
-use std::process::exit;
-
 fn main() {
-    let mut args = env::args();
+    let mut args = std::env::args();
     args.next();
     let term = match args.next() {
         None => {
             eprintln!("Please supply a term to define\nExiting...");
-            exit(-1);
+            std::process::exit(-1)
         }
         Some(term) => term,
     };
-    dbg!(term);
+    let json = crate::utils::get(&format!(
+        "https://api.wordnik.com/v4/word.json/{}/definitions",
+        term
+    ));
+    println!("{}", json);
 }
